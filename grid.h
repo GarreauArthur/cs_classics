@@ -1,7 +1,10 @@
 #include <iostream>
 #include <stdlib.h>
+#include "rlutil/rlutil.h"
 
 class Grid {
+public:
+    static const char WALL = '#';
 private:
     unsigned int _number_of_lines;
     unsigned int _number_of_columns;
@@ -37,15 +40,115 @@ public:
         grid[line][column] = character;
     }
 
-    void print() const
+    void print(int const& type) const
     {
+        switch ( type )
+        {
+            case 0:
+                printWithBorders();
+            break;
+
+            case 1:
+                printWithPoints();
+            break;
+            
+            default:
+                printWithSpaces();
+            break;
+        }
+    }
+
+    void printWithBorders() const
+    {
+        std::cout << "+";
+        for ( int k = 0; k < _number_of_columns; k++ )
+        {
+            std::cout << "---+";
+        }
+        std::cout << std::endl;
+
         for ( int i = 0; i < _number_of_lines; i++ ) 
         {
             for ( int j = 0; j < _number_of_columns; j++ ) {
-                std::cout << " | " << grid[i][j];
+                std::cout << "| ";
+                rlutil::setColor(rlutil::GREEN);
+                std::cout << grid[i][j] << " ";
+                rlutil::setColor(rlutil::GREY);
             }
-            std::cout << " |" << std::endl;
+            std::cout << "|" << std::endl;
+
+            std::cout << "+";
+            for ( int k = 0; k < _number_of_columns; k++)
+            {
+                std::cout << "---+";
+            }
+            std::cout << std::endl;
+
         }
+    }
+
+    void printWithSpaces() const
+    {
+
+        std::cout << "#";
+        for ( int k = 0; k < _number_of_columns; k++ )
+        {
+            std::cout << "#";
+        }
+        std::cout << "#" << std::endl;
+        
+        for ( int i = 0; i < _number_of_lines; i++ ) 
+        {
+            std::cout << "#";
+            for ( int j = 0; j < _number_of_columns; j++ ) {
+                rlutil::setColor(rlutil::GREEN);
+                std::cout << grid[i][j];
+                rlutil::setColor(rlutil::GREY);
+            }
+            std::cout << "#" << std::endl;
+        }
+        
+        std::cout << "#";
+        for ( int k = 0; k < _number_of_columns; k++ )
+        {
+            std::cout << "#";
+        }
+        std::cout << "#" << std::endl;
+    }
+
+    void printWithPoints() const
+    {
+        std::cout << "#";
+        for ( int k = 0; k < _number_of_columns; k++ )
+        {
+            std::cout << "#";
+        }
+        std::cout << "#" << std::endl;
+        
+        for ( int i = 0; i < _number_of_lines; i++ ) 
+        {
+            std::cout << "#";
+            for ( int j = 0; j < _number_of_columns; j++ ) {
+                if ( grid[i][j] == ' ' )
+                {
+                    std::cout << '.';
+                }
+                else
+                {
+                    rlutil::setColor(rlutil::GREEN);
+                    std::cout << grid[i][j];
+                    rlutil::setColor(rlutil::GREY);
+                }
+            }
+            std::cout << "#" << std::endl;
+        }
+        
+        std::cout << "#";
+        for ( int k = 0; k < _number_of_columns; k++ )
+        {
+            std::cout << "#";
+        }
+        std::cout << "#" << std::endl;
     }
 
     void clean() const
